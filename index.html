@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyDailyLook Pro Max - Armario IA Vectorial</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --bg-input: #2d2d2d;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent: #bb86fc;
+            --accent-hover: #9a67ea;
+            --success: #03dac6;
+            --danger: #ff7675;
+            --border: #333333;
+            --ai-tech: #007bff; /* Color para funciones de IA */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        /* Estructura Principal */
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Fila Superior: Creador Manual y Generador Automático */
+        .outfit-creation-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .outfit-creation-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Fila Inferior: Vestidor y Calendario */
+        .closet-calendar-row {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 1000px) {
+            .closet-calendar-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        h2 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            color: var(--accent);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Formulario */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        button {
+            background-color: var(--accent);
+            color: #121212;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 1rem;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background-color: var(--bg-input);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            border: 1px solid var(--border);
+        }
+
+        /* Vestidor Visual */
+        .closet-section {
+            margin-top: 25px;
+        }
+
+        .closet-section h3 {
+            font-size: 0.9em;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--accent);
+            padding-left: 8px;
+        }
+
+        .clothing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+            min-height: 50px;
+            background: rgba(255,255,255,0.01);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+        }
+
+        .cloth-card {
+            background: var(--bg-input);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
+        }
+
+        .cloth-card svg, .suggested-item svg {
+            width: 70px;
+            height: 70px;
+            display: block;
+        }
+
+        .cloth-card .info {
+            padding: 8px 6px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cloth-card .remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.7);
+            color: var(--danger);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            line-height: 16px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            z-index: 5;
+        }
+
+        /* Cajas de Outfit */
+        .suggestion-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid var(--border);
+            min-height: 380px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .suggested-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            background: var(--bg-input);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            box-sizing: border-box;
+        }
+
+        .suggested-item .svg-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .suggested-item svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .suggested-item .details {
+            text-align: left;
+        }
+
+        .suggested-item .category-label {
+            font-size: 0.65rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .suggested-item .item-name {
+            font-size: 0.88rem;
+            font-weight: bold;
+        }
+
+        .btn-suggest {
+            background-color: var(--success);
+            color: #121212;
+            margin-top: 10px;
+        }
+        .btn-suggest:hover {
+            background-color: #00dfc9;
+        }
+
+        .btn-register {
+            background-color: transparent;
+            color: var(--success);
+            border: 2px solid var(--success);
+            margin-top: 10px;
+        }
+        .btn-register:hover {
+            background-color: var(--success);
+            color: #121212;
+        }
+
+        /* Botones IA */
+        .btn-ai {
+            background-color: var(--ai-tech);
+            color: white;
+            margin-top: 10px;
+        }
+        .btn-ai:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilos para el Escáner */
+        #ai-scanner-container {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(0, 123, 255, 0.05);
+            transition: border-color 0.3s;
+        }
+        #ai-scanner-container:hover {
+            border-color: var(--ai-tech);
+        }
+        #file-input {
+            display: none;
+        }
+        #scan-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            border: 1px solid var(--border);
+        }
+        #scan-status {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* Vista previa de imagen IA */
+        #ai-image-preview {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 12px;
+            object-fit: cover;
+            display: none;
+            z-index: 2;
+        }
+        .suggestion-box.showing-ai-image .suggested-item {
+            visibility: hidden; /* Oculta los vectoriales pero mantiene el espacio */
+        }
+        #btn-toggle-vector, #btn-generate-ai-image {
+            z-index: 3; /* Asegurar que los botones estén sobre la imagen */
+            position: relative;
+        }
+
+        /* Calendario */
+        .calendar-container {
+            margin-top: 15px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .calendar-nav {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: auto;
+            padding: 5px 10px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .day-name {
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding-bottom: 5px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+            min-height: 40px;
+        }
+        .calendar-day:hover {
+            border-color: var(--accent);
+        }
+        .calendar-day.active {
+            border-color: var(--accent);
+            background: rgba(187, 134, 252, 0.1);
+        }
+        .calendar-day.has-outfit {
+            background: rgba(3, 218, 198, 0.15);
+            border-color: var(--success);
+        }
+        .day-number {
+            font-weight: bold;
+            align-self: flex-start;
+        }
+        .day-status {
+            font-size: 0.55rem;
+            color: var(--success);
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .selected-log-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 10;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🕶️ MyDailyLook Pro Max</h1>
+        <p>Tu armario digital inteligente con creador manual, automático e IA Generativa</p>
+    </header>
+
+    <div class="main-layout">
+        
+        <!-- PRIMERA FILA: Creador Manual (Izquierda) y Generador Automático (Derecha) -->
+        <div class="outfit-creation-row">
+            
+            <!-- 1. Creador Manual de Outfits -->
+            <div class="card">
+                <h2>✍️ Creador Manual de Outfits</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">Selecciona libremente las prendas de tu armario para montar tu propio look.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>Parte Superior (Base):</label>
+                        <select id="select-manual-superior" onchange="updateManualPreview('superior')">
+                            <option value="">- Seleccionar -</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sudadera / Jersey (Opcional):</label>
+                        <select id="select-manual-warm" onchange="updateManualPreview('warm')">
+                            <option value="">- Seleccionar -</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Parte Inferior:</label>
+                        <select id="select-manual-inferior" onchange="updateManualPreview('inferior')">
+                            <option value="">- Seleccionar -</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Calzado:</label>
+                        <select id="select-manual-calzado" onchange="updateManualPreview('calzado')">
+                            <option value="">- Seleccionar -</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Accesorio (Opcional):</label>
+                        <select id="select-manual-accesorio" onchange="updateManualPreview('accesorio')">
+                            <option value="">- Seleccionar -</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="suggestion-box">
+                    <div class="suggested-item" id="m-superior">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Parte Superior / Capas</div>
+                            <div class="item-name" id="text-m-superior">- No asignado -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="m-warm">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Abrigo / Tejido</div>
+                            <div class="item-name" id="text-m-warm">- Opcional -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="m-inferior">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Parte Inferior</div>
+                            <div class="item-name" id="text-m-inferior">- No asignado -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="m-calzado">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Calzado</div>
+                            <div class="item-name" id="text-m-calzado">- No asignado -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="m-accesorio">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Detalle / Accesorio</div>
+                            <div class="item-name" id="text-m-accesorio">- Opcional -</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-register" id="btn-save-manual" onclick="saveManualOutfitToCalendar()" disabled>📅 Registrar Look Manual en Calendario</button>
+            </div>
+
+            <!-- 2. Generador de Outfit Automático -->
+            <div class="card" id="auto-generator-card">
+                <h2>⚡ Generador de Outfit Automático</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">Deja que el algoritmo inteligente combine un look equilibrado por ti.</p>
+                
+                <div class="suggestion-box" id="auto-suggestion-box">
+                    <!-- Loading overlay para la IA -->
+                    <div class="loading-overlay" id="ai-loading-overlay">🤖 Generando imagen...</div>
+                    
+                    <!-- Imagen generada por IA -->
+                    <img id="ai-image-preview" src="" alt="Vista previa del look IA">
+
+                    <div class="suggested-item" id="s-superior">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Parte Superior / Capas</div>
+                            <div class="item-name" id="text-s-superior">- Sin Outfit Generado -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="s-sudadera-jersey">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Abrigo / Tejido</div>
+                            <div class="item-name" id="text-s-sudadera-jersey">- Opcional (Clima) -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="s-inferior">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Parte Inferior</div>
+                            <div class="item-name" id="text-s-inferior">- Sin Outfit Generado -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="s-calzado">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Calzado</div>
+                            <div class="item-name" id="text-s-calzado">- Sin Outfit Generado -</div>
+                        </div>
+                    </div>
+                    <div class="suggested-item" id="s-accesorio">
+                        <div class="svg-placeholder"></div>
+                        <div class="details">
+                            <div class="category-label">Detalle / Accesorio</div>
+                            <div class="item-name" id="text-s-accesorio">- Toque final -</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn-suggest" onclick="generateOutfit()">⚡ Combinar Vectorial</button>
+                    <button class="btn-ai" id="btn-generate-ai-image" onclick="generateAiLookImage()" disabled>✨ Ver en IA (DALL-E 3)</button>
+                </div>
+                <button class="btn-ai" id="btn-toggle-vector" onclick="toggleVectorView()" style="display: none; background-color: var(--bg-input); border: 1px solid var(--border); margin-top: 10px;">⬅️ Volver a Vista Vectorial</button>
+                <button class="btn-register" id="btn-save-outfit" onclick="saveOutfitToCalendar()" disabled>📅 Registrar Outfit en Calendario</button>
+            </div>
+
+        </div>
+
+        <!-- SEGUNDA FILA: Mi Vestidor Clasificado y Calendario Histórico -->
+        <div class="closet-calendar-row">
+            
+            <!-- Armario y Carga de prendas -->
+            <div class="card">
+                <h2>➕ Añadir Nueva Prenda</h2>
+                
+                <!-- NUEVO: Escáner de Prendas con IA -->
+                <div id="ai-scanner-container">
+                    <h3 style="color: var(--ai-tech); margin-top: 0;">✨ Escáner de Armario IA</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Sube una foto de tu prenda. La IA identificará el nombre y la categoría automáticamente.</p>
+                    
+                    <button class="btn-ai" onclick="document.getElementById('file-input').click()">📷 Subir o Hacer Foto</button>
+                    <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
+                    
+                    <img id="scan-preview" src="" alt="Previsualización de imagen">
+                    <div id="scan-status"></div>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 15px; color: var(--border);">ó añadir manualmente</div>
+
+                <form id="clothing-form">
+                    <div class="form-group" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 15px; align-items: end;">
+                        <div>
+                            <label for="item-name">Nombre de la prenda:</label>
+                            <input type="text" id="item-name" placeholder="Ej: Sudadera con capucha lila" required>
+                        </div>
+                        <div>
+                            <label for="item-category">Categoría:</label>
+                            <select id="item-category">
+                                <option value="superior">Partes Superiores (Tops/Camisas)</option>
+                                <option value="sudadera">Sudaderas con Capucha</option>
+                                <option value="jersey">Jerséis</option>
+                                <option value="chaqueta">Abrigos y Chaquetas</option>
+                                <option value="inferior">Pantalones y Bermudas</option>
+                                <option value="calzado">Calzado</option>
+                                <option value="accesorio">Accesorios Básicos</option>
+                            </select>
+                        </div>
+                        <button type="submit" style="height: 46px;">Guardar</button>
+                    </div>
+                </form>
+
+                <h2 style="margin-top: 35px;">👚 Tu Vestidor de Ropa</h2>
+                
+                <div class="closet-section">
+                    <h3>Partes Superiores</h3>
+                    <div id="list-superior" class="clothing-grid"></div>
+                </div>
+                
+                <div class="closet-section">
+                    <h3>Sudaderas con Capucha</h3>
+                    <div id="list-sudadera" class="clothing-grid"></div>
+                </div>
+
+                <div class="closet-section">
+                    <h3>Jerséis</h3>
+                    <div id="list-jersey" class="clothing-grid"></div>
+                </div>
+
+                <div class="closet-section">
+                    <h3>Abrigos & Chaquetas</h3>
+                    <div id="list-chaqueta" class="clothing-grid"></div>
+                </div>
+
+                <div class="closet-section">
+                    <h3>Pantalones & Bermudas</h3>
+                    <div id="list-inferior" class="clothing-grid"></div>
+                </div>
+
+                <div class="closet-section">
+                    <h3>Calzado</h3>
+                    <div id="list-calzado" class="clothing-grid"></div>
+                </div>
+
+                <div class="closet-section">
+                    <h3>Accesorios Sugeridos</h3>
+                    <div id="list-accesorio" class="clothing-grid"></div>
+                </div>
+            </div>
+
+            <!-- Calendario -->
+            <div class="card" style="height: fit-content;">
+                <h2>📅 Calendario de Outfits</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Visualiza qué te pusiste en cada fecha histórica.</p>
+                
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" onclick="prevMonth()">◀</button>
+                        <span id="calendar-month-year" style="font-weight: bold; text-transform: uppercase;"></span>
+                        <button class="calendar-nav" onclick="nextMonth()">▶</button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Generado dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="selected-log-box" id="selected-day-info">
+                    <strong>Día Seleccionado:</strong> Elige un día del calendario para ver tu bitácora de looks.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Diccionario de colores para los SVGs (se mantiene igual)
+    const colorPalette = {
+        "azul bebe": "#A2C2E8", "azul bilbao": "#00529F", "lila": "#D6C4EB", "magenta": "#CA1F7B",
+        "marron": "#5A3825", "cafe": "#4B3621", "negra": "#1E1E1E", "negro": "#1E1E1E",
+        "blanca": "#F3F3F3", "blancas": "#F3F3F3", "verde oliva": "#556B2F", "rosa pastel": "#FFD1DC",
+        "roja": "#A61C1C", "gris": "#8E8E8E", "celeste": "#87CEEB", "verde botella": "#0B6623",
+        "gamuza": "#C19A6B", "azul marino": "#002060", "beige": "#F5F5DC", "vainilla": "#F3E5AB", "default": "#bb86fc"
+    };
+
+    // Motor de Dibujo SVG (se mantiene igual)
+    function generateSVG(category, name) {
+        if (!name) return "";
+        const lowerName = name.toLowerCase();
+        let color = "#bb86fc"; 
+        for (const [key, val] of Object.entries(colorPalette)) { if (lowerName.includes(key)) { color = val; break; } }
+        const border = "#ffffff";
+        if (category === "superior") {
+            let patterns = "";
+            if (lowerName.includes("cuadros")) { patterns = `<defs><pattern id="gridPattern-${color.replace('#','')}" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></pattern></defs><path d="M20,25 L80,25 L85,85 L15,85 Z" fill="url(#gridPattern-${color.replace('#','')})" />`; }
+            return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" stroke-linejoin="round" fill="${color}"><path d="M20,25 L35,15 L65,15 L80,25 L85,85 L15,85 Z" /><path d="M35,15 L50,30 L65,15" fill="none" stroke="${border}" stroke-width="2"/>${patterns}</g></svg>`;
+        } else if (category === "sudadera" || (category === "warm" && lowerName.includes("sudadera"))) {
+            return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" stroke-linejoin="round" fill="${color}"><path d="M35,28 C35,10 65,10 65,28 Z" /><path d="M20,30 L80,30 L85,85 L15,85 Z" /><path d="M35,65 L65,65 L70,80 L30,80 Z" fill="none" stroke="${border}" /></g></svg>`;
+        } else if (category === "jersey" || (category === "warm" && lowerName.includes("jersey"))) {
+            let collarExtra = ""; if (lowerName.includes("tortuga")) { collarExtra = `<rect x="38" y="10" width="24" height="10" rx="3" fill="${color}" stroke="${border}" stroke-width="2"/>`; }
+            return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" stroke-linejoin="round" fill="${color}">${collarExtra}<path d="M20,20 L80,20 L85,85 L15,85 Z" /><path d="M35,20 L65,20" fill="none" /></g></svg>`;
+        } else if (category === "chaqueta") {
+            let plumasLines = ""; if (lowerName.includes("plumas")) { plumasLines = `<line x1="20" y1="40" x2="80" y2="40" stroke="rgba(255,255,255,0.3)" stroke-width="2"/><line x1="18" y1="55" x2="82" y2="55" stroke="rgba(255,255,255,0.3)" stroke-width="2"/><line x1="16" y1="70" x2="84" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>`; }
+            return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" stroke-linejoin="round" fill="${color}"><path d="M20,20 L80,20 L85,85 L15,85 Z" /><line x1="50" y1="20" x2="50" y2="85" stroke="${border}" stroke-width="2"/>${plumasLines}</g></svg>`;
+        } else if (category === "inferior") {
+            let isShort = lowerName.includes("corto") || lowerName.includes("bermudas") || lowerName.includes("chandal corto");
+            let pantPath = isShort ? "M25,15 L75,15 L80,55 L55,55 L50,35 L45,55 L20,55 Z" : "M25,15 L75,15 L82,90 L56,90 L50,45 L44,90 L18,90 Z";
+            return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" stroke-linejoin="round" fill="${color}"><path d="${pantPath}" /></g></svg>`;
+        } else if (category === "calzado") {
+            let isBoot = lowerName.includes("bota") || lowerName.includes("botin");
+            let bootCollar = isBoot ? "<path d=\"M15,35 L45,35 L45,65 L15,65 Z\" />" : "";
+            return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" stroke-linejoin="round" fill="${color}">${bootCollar}<path d="M15,60 C15,45 85,45 85,75 L15,75 Z" /><rect x="12" y="70" width="76" height="7" rx="2" fill="${lowerName.includes("deportivas") ? '#ffffff' : color}" stroke="${border}" stroke-width="1.5"/></g></svg>`;
+        } else { return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><g stroke="${border}" stroke-width="2" fill="none"><circle cx="50" cy="50" r="18" fill="${color}" /><line x1="50" y1="15" x2="50" y2="32" stroke="${border}" stroke-width="3"/><line x1="50" y1="68" x2="50" y2="85" stroke="${border}" stroke-width="3"/></g></svg>`; }
+    }
+
+    // Estructura de armario base
+    let closet = JSON.parse(localStorage.getItem('closet_v6_ai')) || {
+        superior: [{ name: "Camisa Oxford Celeste" }, { name: "Camiseta Básica Negra" }],
+        sudadera: [{ name: "Sudadera lila" }, { name: "Sudadera negra" }],
+        jersey: [{ name: "Jersey negro cuello tortuga" }],
+        chaqueta: [{ name: "Chaqueta cuero negra" }, { name: "Abrigo gris" }],
+        inferior: [{ name: "Pantalon vaquero clasico" }, { name: "Chino beige" }],
+        calzado: [{ name: "Deportivas blancas" }, { name: "Zapato cafe" }],
+        accesorio: [{ name: "Reloj negro" }]
+    };
+
+    let outfitHistory = JSON.parse(localStorage.getItem('outfit_history_v6_ai')) || {};
+    const form = document.getElementById('clothing-form');
+    let currentOutfitGenerated = null;
+    let manualOutfit = { superior: null, warm: null, inferior: null, calzado: null, accesorio: null };
+    let selectedDate = new Date();
+    let viewDate = new Date();
+
+    function renderCloset() {
+        ['superior', 'sudadera', 'jersey', 'chaqueta', 'inferior', 'calzado', 'accesorio'].forEach(category => {
+            const container = document.getElementById(`list-${category}`);
+            container.innerHTML = '';
+            closet[category].forEach((item, index) => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'cloth-card';
+                itemCard.innerHTML = `<span class="remove" onclick="removeItem('${category}', ${index})">&times;</span>${generateSVG(category, item.name)}<div class="info" title="${item.name}">${item.name}</div>`;
+                container.appendChild(itemCard);
+            });
+        });
+        localStorage.setItem('closet_v6_ai', JSON.stringify(closet));
+        populateManualSelectors();
+    }
+
+    function populateManualSelectors() {
+        const fillSelector = (id, items) => {
+            const selector = document.getElementById(id);
+            selector.innerHTML = '<option value="">- Seleccionar -</option>';
+            items.forEach(item => { const opt = document.createElement('option'); opt.value = item.name; opt.textContent = item.name; selector.appendChild(opt); });
+        };
+        fillSelector('select-manual-superior', closet.superior);
+        const warmClothes = [...closet.sudadera, ...closet.jersey, ...closet.chaqueta];
+        fillSelector('select-manual-warm', warmClothes);
+        fillSelector('select-manual-inferior', closet.inferior);
+        fillSelector('select-manual-calzado', closet.calzado);
+        fillSelector('select-manual-accesorio', closet.accesorio);
+    }
+
+    function updateManualPreview(category) {
+        const selectorId = { superior: 'select-manual-superior', warm: 'select-manual-warm', inferior: 'select-manual-inferior', calzado: 'select-manual-calzado', accesorio: 'select-manual-accesorio' }[category];
+        const val = document.getElementById(selectorId).value;
+        const container = document.getElementById(`m-${category}`);
+        const placeholder = container.querySelector('.svg-placeholder');
+        const label = document.getElementById(`text-m-${category}`);
+        if (!val) { placeholder.innerHTML = ""; label.innerText = category === 'warm' || category === 'accesorio' ? "- Opcional -" : "- No asignado -"; manualOutfit[category] = null;
+        } else { placeholder.innerHTML = generateSVG(category, val); label.innerText = val; manualOutfit[category] = val; }
+        if (manualOutfit.superior && manualOutfit.inferior && manualOutfit.calzado) { document.getElementById('btn-save-manual').removeAttribute('disabled'); } else { document.getElementById('btn-save-manual').setAttribute('disabled', 'true'); }
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('item-name');
+        const categorySelect = document.getElementById('item-category');
+        const name = nameInput.value.trim();
+        const category = categorySelect.value;
+        if(name) { closet[category].push({ name }); nameInput.value = ''; renderCloset(); }
+    });
+
+    function removeItem(category, index) { closet[category].splice(index, 1); renderCloset(); }
+
+    /* ============================================================
+       NUEVO: Lógica de IA (Escáner y Generador de Imagen)
+       ============================================================ */
+
+    // 1. Escáner de Ropa (GPT-4 Vision)
+    async function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const preview = document.getElementById('scan-preview');
+        const status = document.getElementById('scan-status');
+        
+        // Mostrar previsualización local
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = 'inline-block';
+        };
+        reader.readAsDataURL(file);
+
+        status.innerText = "⏳ Analizando con IA...";
+        status.style.color = var(--ai-tech);
+
+        // Convertir a Base64 para enviarlo a la Netlify Function
+        const base64Image = await convertToBase64(file);
+
+        try {
+            // Llamada al backend (Netlify Function)
+            const response = await fetch('/api/scan-item', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ imageBase64: base64Image })
+            });
+
+            if (!response.ok) throw new Error("Error en la respuesta de la IA");
+
+            const itemData = await response.json(); // { name, category }
+
+            // Rellenar el formulario manual con los datos de la IA
+            document.getElementById('item-name').value = itemData.name;
+            document.getElementById('item-category').value = itemData.category;
+
+            status.innerText = `✅ Identificado: "${itemData.name}" en ${itemData.category}. ¡Revisa y guarda!`;
+            status.style.color = var(--success);
+
+        } catch (error) {
+            console.error(error);
+            status.innerText = "❌ Fallo al escanear. Inténtalo de nuevo o añade manualmente.";
+            status.style.color = var(--danger);
+        }
+    }
+
+    function convertToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // 2. Generador de Imagen de Look Completo (DALL-E 3)
+    async function generateAiLookImage() {
+        if (!currentOutfitGenerated) return;
+
+        // Crear descripción textual del look actual
+        const items = [
+            `a ${currentOutfitGenerated.superior.name}`,
+            `paired with ${currentOutfitGenerated.inferior.name}`,
+            `and ${currentOutfitGenerated.calzado.name}`
+        ];
+        if (currentOutfitGenerated.warm.name && !currentOutfitGenerated.warm.name.includes("Ninguno")) {
+            items.push(`with a ${currentOutfitGenerated.warm.name} on top`);
+        }
+        if (currentOutfitGenerated.accesorio.name && !currentOutfitGenerated.accesorio.name.includes("Sin accesorio")) {
+            items.push(`accessorized with a ${currentOutfitGenerated.accesorio.name}`);
+        }
+
+        const outfitDescription = items.join(', ');
+
+        const overlay = document.getElementById('ai-loading-overlay');
+        const imgPreview = document.getElementById('ai-image-preview');
+        const suggestionBox = document.getElementById('auto-suggestion-box');
+        const btnGenerate = document.getElementById('btn-generate-ai-image');
+        const btnToggle = document.getElementById('btn-toggle-vector');
+
+        overlay.style.display = 'flex';
+        btnGenerate.setAttribute('disabled', 'true');
+
+        try {
+            const response = await fetch('/api/generate-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ outfitDescription })
+            });
+
+            if (!response.ok) throw new Error("Error generando imagen");
+
+            const data = await response.json();
+
+            // Mostrar la imagen
+            imgPreview.src = data.imageUrl;
+            imgPreview.style.display = 'block';
+            suggestionBox.classList.add('showing-ai-image');
+            btnToggle.style.display = 'block'; // Mostrar botón para volver
+
+        } catch (error) {
+            console.error(error);
+            alert("❌ No se pudo generar la imagen de IA. Revisa la consola.");
+        } finally {
+            overlay.style.display = 'none';
+            btnGenerate.removeAttribute('disabled');
+        }
+    }
+
+    function toggleVectorView() {
+        const imgPreview = document.getElementById('ai-image-preview');
+        const suggestionBox = document.getElementById('auto-suggestion-box');
+        const btnToggle = document.getElementById('btn-toggle-vector');
+
+        imgPreview.style.display = 'none';
+        imgPreview.src = ""; // Limpiar src
+        suggestionBox.classList.remove('showing-ai-image');
+        btnToggle.style.display = 'none';
+    }
+
+    /* --- Fin Lógica IA --- */
+
+
+    // Generador Inteligente Automático (actualizado)
+    function generateOutfit() {
+        // Resetear vista IA si estaba activa
+        toggleVectorView();
+
+        const superiors = closet.superior;
+        const inferiors = closet.inferior;
+        const calzados = closet.calzado;
+        const warmClothes = [...closet.sudadera, ...closet.jersey, ...closet.chaqueta];
+        const accessories = closet.accesorio;
+
+        if (superiors.length === 0 || inferiors.length === 0 || calzados.length === 0) {
+            alert("Necesitas tener al menos una prenda en Superior, Inferior y Calzado.");
+            return;
+        }
+
+        const randomSuperior = superiors[Math.floor(Math.random() * superiors.length)];
+        const randomInferior = inferiors[Math.floor(Math.random() * inferiors.length)];
+        const randomCalzado = calzados[Math.floor(Math.random() * calzados.length)];
+        const useWarmCloth = Math.random() > 0.3 && warmClothes.length > 0;
+        const randomWarm = useWarmCloth ? warmClothes[Math.floor(Math.random() * warmClothes.length)] : { name: "Ninguno (Templado)" };
+        const randomAcc = accessories.length > 0 ? accessories[Math.floor(Math.random() * accessories.length)] : { name: "Sin accesorio" };
+
+        currentOutfitGenerated = { superior: randomSuperior, warm: randomWarm, inferior: randomInferior, calzado: randomCalzado, accesorio: randomAcc };
+
+        updateSuggestedItem('s-superior', 'text-s-superior', randomSuperior, 'superior');
+        updateSuggestedItem('s-sudadera-jersey', 'text-s-sudadera-jersey', randomWarm, 'jersey');
+        updateSuggestedItem('s-inferior', 'text-s-inferior', randomInferior, 'inferior');
+        updateSuggestedItem('s-calzado', 'text-s-calzado', randomCalzado, 'calzado');
+        updateSuggestedItem('s-accesorio', 'text-s-accesorio', randomAcc, 'accesorio');
+
+        document.getElementById('btn-save-outfit').removeAttribute('disabled');
+        
+        // NUEVO: Activar botón de generar imagen IA
+        document.getElementById('btn-generate-ai-image').removeAttribute('disabled');
+    }
+
+    function updateSuggestedItem(elementId, textId, item, category) {
+        const container = document.getElementById(elementId);
+        const placeholder = container.querySelector('.svg-placeholder');
+        const label = document.getElementById(textId);
+        if (!item || !item.name || item.name.includes("Ninguno") || item.name.includes("Sin accesorio")) { placeholder.innerHTML = ""; label.innerText = item ? item.name : "- No asignado -"; return; }
+        placeholder.innerHTML = generateSVG(category, item.name);
+        label.innerText = item.name;
+    }
+
+    /* --- HISTÓRICO EN CALENDARIO (se mantiene igual) --- */
+    function getFormattedDateString(date) { const yyyy = date.getFullYear(); const mm = String(date.getMonth() + 1).padStart(2, '0'); const dd = String(date.getDate()).padStart(2, '0'); return `${yyyy}-${mm}-${dd}`; }
+    function buildCalendar() {
+        const grid = document.getElementById('calendar-grid'); grid.innerHTML = ''; const year = viewDate.getFullYear(); const month = viewDate.getMonth();
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+        const daysOfWeek = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]; daysOfWeek.forEach(dName => { const el = document.createElement('div'); el.className = 'day-name'; el.innerText = dName; grid.appendChild(el); });
+        let firstDayIndex = new Date(year, month, 1).getDay(); firstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        for (let i = 0; i < firstDayIndex; i++) { const emptyCell = document.createElement('div'); grid.appendChild(emptyCell); }
+        for (let day = 1; day <= totalDays; day++) {
+            const dayCell = document.createElement('div'); dayCell.className = 'calendar-day'; const thisDate = new Date(year, month, day); const dateStr = getFormattedDateString(thisDate);
+            if (getFormattedDateString(selectedDate) === dateStr) dayCell.classList.add('active');
+            const savedOutfit = outfitHistory[dateStr]; if (savedOutfit) dayCell.classList.add('has-outfit');
+            dayCell.innerHTML = `<span class="day-number">${day}</span><span class="day-status">${savedOutfit ? '👕 Guardado' : ''}</span>`;
+            dayCell.addEventListener('click', () => { selectedDate = thisDate; buildCalendar(); showDayInfo(dateStr); });
+            grid.appendChild(dayCell);
+        }
+    }
+    function prevMonth() { viewDate.setMonth(viewDate.getMonth() - 1); buildCalendar(); }
+    function nextMonth() { viewDate.setMonth(viewDate.getMonth() + 1); buildCalendar(); }
+    function showDayInfo(dateStr) {
+        const infoBox = document.getElementById('selected-day-info'); const outfit = outfitHistory[dateStr]; const dateObj = new Date(dateStr + "T00:00:00"); const formattedTextDate = dateObj.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        if (outfit) { infoBox.innerHTML = `<strong>📅 Outfit de: ${formattedTextDate}</strong><br><ul style="margin: 8px 0 0 15px; padding: 0;"><li>👕 <b>Base:</b> ${outfit.superior}</li><li>🧥 <b>Capa extra:</b> ${outfit.warm || 'Ninguna'}</li><li>👖 <b>Pantalón:</b> ${outfit.inferior}</li><li>👟 <b>Calzado:</b> ${outfit.calzado}</li><li>💼 <b>Accesorio:</b> ${outfit.accesorio || 'Ninguno'}</li></ul><button onclick="clearOutfitFromDate('${dateStr}')" style="background-color: var(--danger); margin-top:10px; width: auto; font-size: 0.75rem; padding: 5px 10px; color: white;">Eliminar Look</button>`;
+        } else { infoBox.innerHTML = `<strong>📅 Outfit de: ${formattedTextDate}</strong><br><span style="color: var(--text-muted);">No hay outfits registrados.</span>`; }
+    }
+    function saveOutfitToCalendar() {
+        if (!currentOutfitGenerated) return; const dateStr = getFormattedDateString(selectedDate);
+        outfitHistory[dateStr] = { superior: currentOutfitGenerated.superior.name, warm: currentOutfitGenerated.warm.name, inferior: currentOutfitGenerated.inferior.name, calzado: currentOutfitGenerated.calzado.name, accesorio: currentOutfitGenerated.accesorio.name };
+        localStorage.setItem('outfit_history_v6_ai', JSON.stringify(outfitHistory)); buildCalendar(); showDayInfo(dateStr); alert(`Outfit guardado!`);
+    }
+    function saveManualOutfitToCalendar() {
+        if (!manualOutfit.superior || !manualOutfit.inferior || !manualOutfit.calzado) return; const dateStr = getFormattedDateString(selectedDate);
+        outfitHistory[dateStr] = { superior: manualOutfit.superior, warm: manualOutfit.warm || 'Ninguna', inferior: manualOutfit.inferior, calzado: manualOutfit.calzado, accesorio: manualOutfit.accesorio || 'Ninguno' };
+        localStorage.setItem('outfit_history_v6_ai', JSON.stringify(outfitHistory)); buildCalendar(); showDayInfo(dateStr); alert(`Look manual registrado!`);
+    }
+    function clearOutfitFromDate(dateStr) { if (confirm("¿Eliminar este outfit?")) { delete outfitHistory[dateStr]; localStorage.setItem('outfit_history_v6_ai', JSON.stringify(outfitHistory)); buildCalendar(); showDayInfo(dateStr); } }
+
+    // Inicialización del Armario
+    renderCloset();
+    buildCalendar();
+    showDayInfo(getFormattedDateString(selectedDate));
+</script>
+
+</body>
+</html>
