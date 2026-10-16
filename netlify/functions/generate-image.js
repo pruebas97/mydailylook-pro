@@ -2,7 +2,7 @@
 const { OpenAI } = require("openai");
 
 const openai = new OpenAI({
-  apiKey: process.env.ARMARIO.KEY,
+  apiKey: process.env.ARMARIO_KEY,
 });
 
 exports.handler = async (event, context) => {
