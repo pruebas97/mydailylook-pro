@@ -4,7 +4,7 @@ const { OpenAI } = require("openai");
 // ¡IMPORTANTE! NUNCA pongas la clave API aquí directamente.
 // Se configurará en el panel de control de Netlify como Variable de Entorno.
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.ARMARIO_KEY,
 });
 
 exports.handler = async (event, context) => {
